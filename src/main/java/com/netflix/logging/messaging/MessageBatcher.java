@@ -89,7 +89,7 @@ public class MessageBatcher<T> {
 
     protected ThreadPoolExecutor processor;
 
-    protected MessageProcessor target = null;
+    protected MessageProcessor target;
 
     /**
      * The number of batches that are currently being processed by the target
@@ -111,15 +111,15 @@ public class MessageBatcher<T> {
 
     private volatile boolean isShutDown;
 
-    private AtomicLong numberAdded = new AtomicLong();
+    private final AtomicLong numberAdded = new AtomicLong();
 
-    private AtomicLong numberDropped = new AtomicLong();
+    private final AtomicLong numberDropped = new AtomicLong();
 
-    private boolean blockingProperty;
+    private final boolean blockingProperty;
 
     private boolean isCollectorPaused;
 
-    private Counter processCount;
+    private final Counter processCount;
     public static final String POOL_MAX_THREADS = "maxThreads";
     public static final String POOL_MIN_THREADS = "minThreads";
     public static final String POOL_KEEP_ALIVE_TIME = "keepAliveTime";
@@ -129,7 +129,7 @@ public class MessageBatcher<T> {
         this.target = target;
         queue = new ArrayBlockingQueue<T>(CONFIGURATION.getBatcherQueueMaxMessages(this.name));
         setBatchMaxMessages(CONFIGURATION.getBatchSize(this.name));
-        batch = new ArrayList<Object>(maxMessages);
+        batch = new ArrayList<>(maxMessages);
         setBatchMaxDelay(CONFIGURATION
                 .getBatcherMaxDelay(this.name));
         collector = new Collector(this, this.name + COLLECTOR_SUFFIX);
@@ -196,7 +196,7 @@ public class MessageBatcher<T> {
      * @return - true, if available false otherwise
      */
     public boolean isSpaceAvailable() {
-        return (queue.remainingCapacity() > 0);
+        return queue.remainingCapacity() > 0;
     }
 
     /**
@@ -347,7 +347,7 @@ public class MessageBatcher<T> {
         
         int waitTimeinMillis = CONFIGURATION.getBatcherWaitTimeBeforeShutdown(this.name);
         long timeToWait = waitTimeinMillis + System.currentTimeMillis();
-        while ((queue.size() > 0 || batch.size() > 0)
+        while ((!queue.isEmpty() || !batch.isEmpty())
                 && (System.currentTimeMillis() < timeToWait)) {
             try {
                 Thread.sleep(1000);

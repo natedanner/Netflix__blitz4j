@@ -46,7 +46,7 @@ public class DefaultBlitz4jConfig implements BlitzConfig {
 
     private static final String NETFLIX_BLITZ4J_LOCKFREE = "netflix.blitz4j.lockfree";
     // Use concurrent hash map to avoid multithreaded contention
-    private Map<String, Object> propsMap = new ConcurrentHashMap<String, Object>();
+    private final Map<String, Object> propsMap = new ConcurrentHashMap<>();
 
     private static final DynamicPropertyFactory CONFIGURATION = DynamicPropertyFactory
             .getInstance();

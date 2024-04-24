@@ -43,18 +43,18 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Karthik Ranganathan
  * 
  */
-public class LoggingContext {
+public final class LoggingContext {
 
     public static final String CONTEXT_LEVEL = "contextlevel";
     private static final BlitzConfig CONFIGURATION = LoggingConfiguration.getInstance().getConfiguration();
     private static final String LOCATION_INFO = "locationInfo";
-    private ThreadLocal<StackTraceElement> stackLocal = new ThreadLocal<StackTraceElement>();
-    private ThreadLocal<LoggingEvent> loggingEvent = new ThreadLocal<LoggingEvent>();
-    private ThreadLocal<Level> contextLevel = new ThreadLocal<Level>();
+    private final ThreadLocal<StackTraceElement> stackLocal = new ThreadLocal<>();
+    private final ThreadLocal<LoggingEvent> loggingEvent = new ThreadLocal<>();
+    private final ThreadLocal<Level> contextLevel = new ThreadLocal<>();
     private final AtomicReference<HashSet<Category>> loggerNeedsLocationRef = new AtomicReference<>(new HashSet<Category>());
 
     private static final LoggingContext instance = new LoggingContext();
-    private Timer stackTraceTimer = Monitors.newTimer("getStacktraceElement",
+    private final Timer stackTraceTimer = Monitors.newTimer("getStacktraceElement",
             TimeUnit.NANOSECONDS);
 
     private LoggingContext() {

@@ -37,12 +37,12 @@ import org.apache.log4j.spi.LoggerFactory;
  */
 public class NFHierarchy extends Hierarchy {
     private LoggerFactory myFactory;
-    private AbstractQueue<HierarchyEventListener> listeners;
+    private final AbstractQueue<HierarchyEventListener> listeners;
 
     public NFHierarchy(Logger root) {
         super(root);
         myFactory = new NFCategoryFactory();
-        listeners = new ConcurrentLinkedQueue<HierarchyEventListener>();
+        listeners = new ConcurrentLinkedQueue<>();
     }
 
     /*

@@ -83,10 +83,10 @@ public class AsyncAppender extends AppenderSkeleton implements
     private MessageBatcher<LoggingEvent> batcher;
     private String originalAppenderName;
     private static final String LOGGER_ASYNC_APPENDER = "asyncAppenders";
-    private AppenderAttachableImpl appenders = new AppenderAttachableImpl();
+    private final AppenderAttachableImpl appenders = new AppenderAttachableImpl();
 
     // The Map to the summary events
-    private ConcurrentMap<String, LogSummary> logSummaryMap = new ConcurrentHashMap<String, LogSummary>();
+    private ConcurrentMap<String, LogSummary> logSummaryMap = new ConcurrentHashMap<>();
 
     private Timer putBufferTimeTracer;
     private Timer putDiscardMapTimeTracer;
@@ -108,25 +108,30 @@ public class AsyncAppender extends AppenderSkeleton implements
         int result = 1;
         result = prime
                 * result
-                + ((originalAppenderName == null) ? 0 : originalAppenderName
+                + (originalAppenderName == null ? 0 : originalAppenderName
                         .hashCode());
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         AsyncAppender other = (AsyncAppender) obj;
         if (originalAppenderName == null) {
-            if (other.originalAppenderName != null)
+            if (other.originalAppenderName != null) {
                 return false;
-        } else if (!originalAppenderName.equals(other.originalAppenderName))
+            }
+        } else if (!originalAppenderName.equals(other.originalAppenderName)) {
             return false;
+        }
         return true;
     }
 
@@ -220,8 +225,8 @@ public class AsyncAppender extends AppenderSkeleton implements
      * @see org.apache.log4j.AppenderSkeleton#append(org.apache.log4j.spi.LoggingEvent)
      */
     public void append(final LoggingEvent event) {
-        boolean isBufferSpaceAvailable = (batcher.isSpaceAvailable() && (logSummaryMap
-                .size() == 0));
+        boolean isBufferSpaceAvailable = batcher.isSpaceAvailable() && (logSummaryMap
+                .size() == 0);
         boolean isBufferPutSuccessful = false;
         LocationInfo locationInfo = null;
         // Reject it when we have a fast property as these can be expensive
@@ -405,15 +410,14 @@ public class AsyncAppender extends AppenderSkeleton implements
         public LoggingEvent createEvent() {
             String msg = MessageFormat
                     .format("{1}[Summarized {0} messages of this type because the internal buffer was full]",
-                            new Object[] { new Integer(count),
+                            new Object[] { Integer.valueOf(count),
                                     event.getMessage() });
-            LoggingEvent loggingEvent = new LoggingEvent(
+            return new LoggingEvent(
                     event.getFQNOfLoggerClass(), event.getLogger(),
                     event.getTimeStamp(), event.getLevel(), msg, Thread
                             .currentThread().getName(),
                     event.getThrowableInformation(), null, null,
                     event.getProperties());
-            return loggingEvent;
         }
     }
 

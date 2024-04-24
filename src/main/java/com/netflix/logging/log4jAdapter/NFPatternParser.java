@@ -35,7 +35,7 @@ import com.netflix.blitz4j.LoggingContext;
  * @author Karthik Ranganathan
  */
 public class NFPatternParser extends PatternParser {
-    private static List<Character> contextCharList = Arrays.asList(Character.valueOf('c'),
+    private static final List<Character> contextCharList = Arrays.asList(Character.valueOf('c'),
             Character.valueOf('l'),
             Character.valueOf('M'),
             Character.valueOf('C'),
@@ -82,10 +82,10 @@ public class NFPatternParser extends PatternParser {
                 case 'L':
                     return locationInfo.getLineNumber();
                 case 'l':
-                    return (locationInfo.getFileName() + ":"
+                    return locationInfo.getFileName() + ":"
                             + locationInfo.getClassName() + " "
                             + locationInfo.getLineNumber() + " " + locationInfo
-                            .getMethodName());
+                            .getMethodName();
                 case 'F':
                     return locationInfo.getFileName();
             }

@@ -37,8 +37,8 @@ import org.apache.log4j.spi.LoggingEvent;
 public class NFAppenderAttachableImpl extends AppenderAttachableImpl implements
 AppenderAttachable {
 
-    protected AbstractQueue<Appender> appenderList = new ConcurrentLinkedQueue<Appender>();
-    private AbstractQueue<String> configuredAppenderList = new ConcurrentLinkedQueue<String>();
+    protected AbstractQueue<Appender> appenderList = new ConcurrentLinkedQueue<>();
+    private final AbstractQueue<String> configuredAppenderList = new ConcurrentLinkedQueue<>();
 
     /*
      * (non-Javadoc)
@@ -104,9 +104,9 @@ AppenderAttachable {
      */
     @Override
     public Enumeration getAllAppenders() {
-        if (appenderList == null)
+        if (appenderList == null) {
             return null;
-        else {
+        } else {
             Iterator<Appender> it = appenderList.iterator();
             return new IteratorEnumeration(it);
         }
@@ -121,8 +121,9 @@ AppenderAttachable {
      */
     @Override
     public Appender getAppender(String name) {
-        if (appenderList == null || name == null)
+        if (appenderList == null || name == null) {
             return null;
+        }
         Appender appender;
         Iterator<Appender> it = appenderList.iterator();
         while (it.hasNext()) {
@@ -143,8 +144,9 @@ AppenderAttachable {
      */
     @Override
     public boolean isAttached(Appender appender) {
-        if (appenderList == null || appender == null)
+        if (appenderList == null || appender == null) {
             return false;
+        }
         Appender a;
         Iterator<Appender> it = appenderList.iterator();
         while (it.hasNext()) {
@@ -175,7 +177,7 @@ AppenderAttachable {
                 // This call is primarily made during dynamic log4 reconfiguration and we will
                 // retain the ability to queue the messages.
                 for (String asyncAppender : asyncAppenders) {
-                    if (!(asyncAppender.equals(a.getClass().getName()))) {
+                    if (!asyncAppender.equals(a.getClass().getName())) {
                          it.remove();
                          a.close();
                     }
@@ -193,8 +195,9 @@ AppenderAttachable {
      */
     @Override
     public void removeAppender(Appender appender) {
-        if (appender == null || appenderList == null)
+        if (appender == null || appenderList == null) {
             return;
+        }
         appenderList.remove(appender);
         configuredAppenderList.remove(appender.getName());
     }
@@ -208,8 +211,9 @@ AppenderAttachable {
      */
     @Override
     public void removeAppender(String name) {
-        if (name == null || appenderList == null)
+        if (name == null || appenderList == null) {
             return;
+        }
         Iterator<Appender> it = appenderList.iterator();
         while (it.hasNext()) {
             Appender a = (Appender) it.next();

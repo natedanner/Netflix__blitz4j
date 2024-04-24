@@ -32,9 +32,9 @@ import org.apache.log4j.Logger;
  * @author Karthik Ranganathan
  *
  */
-public class LoggerCache {
-    private static LoggerCache instance = new LoggerCache();
-    private Map<String, Logger> appenderLoggerMap = new ConcurrentHashMap<String, Logger>(5000);
+public final class LoggerCache {
+    private static final LoggerCache instance = new LoggerCache();
+    private final Map<String, Logger> appenderLoggerMap = new ConcurrentHashMap<>(5000);
     
   
   private LoggerCache() {

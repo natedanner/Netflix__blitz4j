@@ -39,7 +39,7 @@ import org.apache.log4j.spi.LoggingEvent;
 public class NFLockFreeLogger extends Logger {
 
     AppenderAttachableImpl aai;
-    private LoggingContext loggingContext = LoggingContext.getInstance();;
+    private final LoggingContext loggingContext = LoggingContext.getInstance();;
 
     protected NFLockFreeLogger(String name) {
         super(name);
@@ -75,7 +75,7 @@ public class NFLockFreeLogger extends Logger {
         int writes = 0;
 
         for (Category c = this; c != null; c = c.getParent()) {
-            if (!(NFLockFreeLogger.class.isInstance(c))) {
+            if (!NFLockFreeLogger.class.isInstance(c)) {
                 continue;
             }
             if (((NFLockFreeLogger) c).aai != null) {
@@ -99,10 +99,11 @@ public class NFLockFreeLogger extends Logger {
      */
     @Override
     public Enumeration getAllAppenders() {
-        if (aai == null)
+        if (aai == null) {
             return NullEnumeration.getInstance();
-        else
+        } else {
             return aai.getAllAppenders();
+        }
     }
 
     /*
@@ -113,8 +114,9 @@ public class NFLockFreeLogger extends Logger {
     @Override
     public Appender getAppender(String name) {
 
-        if (aai == null || name == null)
+        if (aai == null || name == null) {
             return null;
+        }
 
         return aai.getAppender(name);
     }
@@ -126,9 +128,9 @@ public class NFLockFreeLogger extends Logger {
      */
     @Override
     public boolean isAttached(Appender appender) {
-        if (appender == null || aai == null)
+        if (appender == null || aai == null) {
             return false;
-        else {
+        } else {
             return aai.isAttached(appender);
         }
     }

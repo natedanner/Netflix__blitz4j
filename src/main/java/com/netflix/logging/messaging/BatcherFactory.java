@@ -35,10 +35,10 @@ import java.util.Map;
  *
  */
 public class BatcherFactory {
-	private static BatcherFactory batcherFactory = new BatcherFactory();
+    private static final BatcherFactory batcherFactory = new BatcherFactory();
 
-	// List of all batchers cached
-	private static Map<String, MessageBatcher> batcherMap = new HashMap<String, MessageBatcher>();;
+    // List of all batchers cached
+    private static final Map<String, MessageBatcher> batcherMap = new HashMap<>();;
 
 	
     /**
@@ -47,8 +47,7 @@ public class BatcherFactory {
      * @return - the batcher associated with the name
      */
 	public static MessageBatcher getBatcher(String name) {
-		MessageBatcher batcher = batcherMap.get(name);
-		return batcher;
+		return batcherMap.get(name);
 	}
 
 	
